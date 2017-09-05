@@ -9,7 +9,11 @@ import (
 )
 
 const (
-    GPIO_VALUE_TEMPLETE = "/sys/class/gpio/gpio%s/value"
+    GPIO_PATH = "/sys/class/gpio"
+    GPIO_EXPORT_PATH = GPIO_PATH + "/export"
+    GPIO_UNEXPORT_PATH = GPIO_PATH + "/unexport"
+    GPIO_DIRECTION_PATH= GPIO_PATH + "/gpio%s/direction"
+    GPIO_VALUE_PATH = GPIO_PATH + "/gpio%s/value"
 )
 
 type GoGPIO struct {
@@ -17,21 +21,21 @@ type GoGPIO struct {
 }
 
 func (g *GoGPIO) Export() {
-    g.writeGPIOFile("/sys/class/gpio/export", g.PinNumber)
+    g.writeGPIOFile(GPIO_EXPORT_PATH, g.PinNumber)
     time.Sleep(1 * time.Second)
-    g.writeGPIOFile(fmt.Sprintf("/sys/class/gpio/gpio%s/direction", g.PinNumber), "out")
+    g.writeGPIOFile(fmt.Sprintf(GPIO_DIRECTION_PATH, g.PinNumber), "out")
 }
 
 func (g *GoGPIO) On() {
-    g.writeGPIOFile(fmt.Sprintf(GPIO_VALUE_TEMPLETE, g.PinNumber), "1")
+    g.writeGPIOFile(fmt.Sprintf(GPIO_VALUE_PATH, g.PinNumber), "1")
 }
 
 func (g *GoGPIO) Off() {
-    g.writeGPIOFile(fmt.Sprintf(GPIO_VALUE_TEMPLETE, g.PinNumber), "0")
+    g.writeGPIOFile(fmt.Sprintf(GPIO_VALUE_PATH, g.PinNumber), "0")
 }
 
 func (g *GoGPIO) Status() string {
-    if value, err := g.readGPIOFile(fmt.Sprintf(GPIO_VALUE_TEMPLETE, g.PinNumber)); err == nil {
+    if value, err := g.readGPIOFile(fmt.Sprintf(GPIO_VALUE_PATH, g.PinNumber)); err == nil {
         return value
     } else {
         return ""
@@ -39,7 +43,7 @@ func (g *GoGPIO) Status() string {
 }
 
 func (g *GoGPIO) UnExport() {
-    g.writeGPIOFile("/sys/class/gpio/unexport", g.PinNumber)
+    g.writeGPIOFile(GPIO_UNEXPORT_PATH, g.PinNumber)
 }
 
 
