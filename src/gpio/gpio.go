@@ -5,6 +5,7 @@ import (
     "log"
     "io/ioutil"
     "fmt"
+    "time"
 )
 
 const (
@@ -21,6 +22,7 @@ type GoGPIO struct {
 
 func (g *GoGPIO) Export() {
     g.writeGPIOFile(GPIO_EXPORT_PATH, g.PinNumber)
+    time.Sleep(2 * time.Second)
     g.writeGPIOFile(fmt.Sprintf(GPIO_DIRECTION_PATH, g.PinNumber), "out")
 }
 
