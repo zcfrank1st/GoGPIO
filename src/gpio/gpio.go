@@ -56,12 +56,14 @@ func (g *GoGPIO) readGPIOFile(path string) (string, error){
 
 func (g *GoGPIO) writeGPIOFile(path string, value string) {
     if f, err := os.OpenFile(path, os.O_APPEND | os.O_WRONLY, os.FileMode(0777)); err == nil {
-        defer f.Close()
-
         if _,err := f.WriteString(value); err != nil {
+            f.Close()
             log.Fatal("write gpio fatal ", err)
+        } else {
+            f.Close()
         }
     } else {
+        f.Close()
         log.Fatal("manipulate gpio, fatal : ", err)
     }
 }
