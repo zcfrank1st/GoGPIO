@@ -4,7 +4,6 @@ import (
     "os"
     "log"
     "io/ioutil"
-    "time"
     "fmt"
 )
 
@@ -22,7 +21,6 @@ type GoGPIO struct {
 
 func (g *GoGPIO) Export() {
     g.writeGPIOFile(GPIO_EXPORT_PATH, g.PinNumber)
-    time.Sleep(1 * time.Second)
     g.writeGPIOFile(fmt.Sprintf(GPIO_DIRECTION_PATH, g.PinNumber), "out")
 }
 
@@ -61,7 +59,7 @@ func (g *GoGPIO) writeGPIOFile(path string, value string) {
         defer f.Close()
 
         if _,err := f.WriteString(value); err != nil {
-            log.Fatal("write gpio fatal", err)
+            log.Fatal("write gpio fatal ", err)
         }
     } else {
         log.Fatal("manipulate gpio, fatal : ", err)
